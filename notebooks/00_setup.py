@@ -5,7 +5,7 @@
 
 # COMMAND ----------
 
-dbutils.widgets.text("catalog", "main")
+dbutils.widgets.text("catalog", "")  # empty = workspace default (e.g. `workspace` on Free Edition)
 dbutils.widgets.text("schema", "swedish_social_worlds")
 dbutils.widgets.text("folke_max_texts", "5000")
 dbutils.widgets.text("lb_max_texts", "60")
@@ -27,7 +27,8 @@ sys.path.append(os.path.abspath("../src"))
 from pyspark.sql import functions as F
 import sparv
 
-C, S = W["catalog"], W["schema"]
+C, S = W["catalog"] or spark.sql("SELECT current_catalog()").first()[0], W["schema"]
+print("Unity Catalog location:", f"{C}.{S}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {C}.{S}")
 for vol in ("raw", "exports"):
     spark.sql(f"CREATE VOLUME IF NOT EXISTS {C}.{S}.{vol}")

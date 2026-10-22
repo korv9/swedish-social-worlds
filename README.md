@@ -41,7 +41,7 @@ Every export carries the attribution string, as CC BY requires.
 
 1. Add this repo as a Databricks Git folder.
 2. Open `notebooks/run_pipeline.py` on a cluster with **DBR 15.4 LTS ML+** and Unity Catalog. A GPU is optional.
-3. Set the `catalog`/`schema` widgets, then click *Run all*.
+3. Optionally set the `catalog`/`schema` widgets (empty catalog = workspace default), then click *Run all*.
 
 The parser self-check runs locally without dependencies: `python src/sparv.py`.
 
