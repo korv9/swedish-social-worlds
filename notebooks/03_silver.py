@@ -37,14 +37,17 @@ from pyspark import cloudpickle
 from pyspark.sql import functions as F
 import xml.etree.ElementTree as ET
 
-cloudpickle.register_pickle_by_value(sparv)  # ship src/sparv.py to executors with the UDF
+cloudpickle.register_pickle_by_value(sparv)  # ship src/sparv.py functions to executors with the UDF
+# Import functions, not the module: pickling the module object drags in the Databricks import loader (dbruntime),
+# which executors cannot load.
+from sparv import passages, text_id
 
 
 @F.udf("array<struct<doc_id:string, idx:int, text:string, lemmas:array<string>, page_url:string>>")
 def parse_passages(raw):
     root = ET.fromstring(raw)
-    tid = sparv.text_id(root.attrib)
-    return [(tid, i, t, l, u) for i, (t, l, u) in enumerate(sparv.passages(root))]
+    tid = text_id(root.attrib)
+    return [(tid, i, t, l, u) for i, (t, l, u) in enumerate(passages(root))]
 
 
 paths = [r.raw_path for r in spark.table("bronze_texts").select("raw_path").collect()]
