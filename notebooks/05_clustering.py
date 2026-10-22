@@ -27,7 +27,7 @@ for corpus, g in df.groupby("corpus"):
         continue
     X = np.stack(g.embedding.values)
     reduced = umap.UMAP(n_components=5, n_neighbors=15, min_dist=0.0, metric="cosine", random_state=42).fit_transform(X)
-    labels = HDBSCAN(min_cluster_size=MIN_CS).fit_predict(reduced)
+    labels = HDBSCAN(min_cluster_size=MIN_CS, cluster_selection_method=W["cluster_selection"]).fit_predict(reduced)
     xy = umap.UMAP(n_components=2, n_neighbors=15, min_dist=0.1, metric="cosine", random_state=42).fit_transform(X)
     g = g.assign(cluster_id=labels, umap_x=xy[:, 0], umap_y=xy[:, 1])
     points.append(g)

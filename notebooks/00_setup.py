@@ -7,16 +7,19 @@
 
 dbutils.widgets.text("catalog", "")  # empty = workspace default (e.g. `workspace` on Free Edition)
 dbutils.widgets.text("schema", "swedish_social_worlds")
-dbutils.widgets.text("folke_max_texts", "5000")
-dbutils.widgets.text("lb_max_texts", "60")
+dbutils.widgets.text("folke_max_texts", "15000")
+dbutils.widgets.text("lb_max_texts", "300")
 dbutils.widgets.text("max_passages_per_corpus", "2000")
+dbutils.widgets.text("max_passages_per_doc", "20")  # stops long books from dominating clusters
+dbutils.widgets.text("min_theme_hits", "1")
 dbutils.widgets.text("embedding_model", "intfloat/multilingual-e5-base")
 dbutils.widgets.text("min_cluster_size", "15")
+dbutils.widgets.dropdown("cluster_selection", "leaf", ["leaf", "eom"])  # leaf = finer clusters
 dbutils.widgets.dropdown("refresh_bronze", "false", ["true", "false"])
 
 W = {k: dbutils.widgets.get(k) for k in [
-    "catalog", "schema", "folke_max_texts", "lb_max_texts", "max_passages_per_corpus",
-    "embedding_model", "min_cluster_size", "refresh_bronze"]}
+    "catalog", "schema", "folke_max_texts", "lb_max_texts", "max_passages_per_corpus", "max_passages_per_doc",
+    "min_theme_hits", "embedding_model", "min_cluster_size", "cluster_selection", "refresh_bronze"]}
 
 # COMMAND ----------
 

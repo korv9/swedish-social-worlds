@@ -19,7 +19,7 @@ Clusters are **exploratory themes that need interpretation**, not finished histo
 | Layer | Where | Contents |
 |---|---|---|
 | Bronze | Volume `raw/<corpus>/<text_id>.xml`, table `bronze_texts` | Original Sparv XML per text, source file URL, DOI, licence, ingest time |
-| Silver | `silver_documents`, `silver_passages`, `silver_theme_passages` | Clean documents, ~150-word passages with stable IDs (`corpus:doc_id:0000`) and source links, theme-filtered sample |
+| Silver | `silver_documents`, `silver_passages`, `silver_theme_passages` | Clean documents, ~150-word passages with stable IDs (`corpus:doc_id:0000`) and source links, a name-masked `embed_text`, theme-filtered sample (max 20 passages per document) |
 | ML | `embeddings` | Multilingual embeddings (`intfloat/multilingual-e5-base`), cached by passage, text hash and model |
 | Gold | `gold_passage_points`, `gold_clusters` | Cluster membership, UMAP coordinates, metadata; cluster keywords (class TF-IDF on lemmas), representative passages, empty `label` for curators |
 | Exports | Volume `exports/` | `umap_<corpus>.html` (click a point to open the source), `points.parquet`, `clusters.json` |

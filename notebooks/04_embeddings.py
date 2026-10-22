@@ -15,13 +15,13 @@ spark.sql("CREATE TABLE IF NOT EXISTS embeddings "
 cached = spark.table("embeddings").where(F.col("model") == MODEL)
 todo = (spark.table("silver_theme_passages")
         .join(cached, ["passage_id", "text_hash"], "left_anti")
-        .select("passage_id", "text_hash", "text").toPandas())
+        .select("passage_id", "text_hash", "embed_text").toPandas())
 print(len(todo), "passages to embed")
 
 if len(todo):
     prefix = "passage: " if "e5" in MODEL else ""  # E5 models expect this prefix
     vecs = SentenceTransformer(MODEL).encode(
-        [prefix + t for t in todo.text], batch_size=32, normalize_embeddings=True, show_progress_bar=True)
-    todo = todo.drop(columns="text").assign(
+        [prefix + t for t in todo.embed_text], batch_size=32, normalize_embeddings=True, show_progress_bar=True)
+    todo = todo.drop(columns="embed_text").assign(
         model=MODEL, embedding=[v.astype("float32").tolist() for v in vecs], created_at=datetime.now(timezone.utc))
     spark.createDataFrame(todo, spark.table("embeddings").schema).write.mode("append").saveAsTable("embeddings")
