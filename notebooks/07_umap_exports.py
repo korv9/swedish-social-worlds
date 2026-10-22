@@ -15,10 +15,10 @@ export = gold_points.assign(
     excerpt=lambda d: d.text.str.slice(0, 300))
 
 for corpus, g in export.groupby("corpus"):
+    g = g.assign(passage=g.excerpt.map(lambda t: "<br>".join(textwrap.wrap(t, 70))))  # hover-only line breaks
     fig = px.scatter(
         g, x="umap_x", y="umap_y", color="cluster", custom_data=["source_url"],
-        hover_data={"title": True, "year": True,
-                    "excerpt": g.excerpt.map(lambda t: "<br>".join(textwrap.wrap(t, 70))),
+        hover_data={"title": True, "year": True, "passage": True,
                     "umap_x": False, "umap_y": False, "cluster": False},
         color_discrete_map={"noise": "lightgrey"},
         title=f"{corpus}: thematic map ({len(g)} passages)<br><sup>{ATTRIBUTION}</sup>",
