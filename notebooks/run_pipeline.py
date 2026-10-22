@@ -10,7 +10,7 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install -q umap-learn==0.5.7 sentence-transformers==3.3.1
+# MAGIC %pip install -q umap-learn==0.5.7 sentence-transformers==3.3.1 plotly==5.24.1
 
 # COMMAND ----------
 
